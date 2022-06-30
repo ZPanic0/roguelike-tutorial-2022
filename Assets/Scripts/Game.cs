@@ -1,33 +1,53 @@
 using UnityEngine;
 
-public class Game : RB.IRetroBlitGame
+namespace RoguelikeTutorial
 {
-    public bool Initialize()
+
+    public static class WorldConfig
     {
-        var spritesheet = new SpriteSheetAsset();
-        spritesheet.Load("spritesheet");
-        spritesheet.grid = new SpriteGrid(new Vector2i(10, 10));
-
-        RB.SpriteSheetSet(spritesheet);
-
-        return true;
+        public static int DisplayWidth { get; set; } = 80;
+        public static int DisplayHeight { get; set; } = 50;
+        public static int TileSize { get; set; } = 10;
     }
 
-    public RB.HardwareSettings QueryHardware()
+    public static class Player
     {
-        var hardware = new RB.HardwareSettings();
-
-        return hardware;
+        public static int X { get; set; } = WorldConfig.DisplayWidth / 2;
+        public static int Y { get; set; } = WorldConfig.DisplayHeight / 2;
     }
 
-    public void Render()
+    public class Game : RB.IRetroBlitGame
     {
-        RB.DrawSprite(110, new Vector2i(240, 128));
-        RB.DrawSprite(106, new Vector2i(250, 128));
-        RB.DrawSprite(1, new Vector2i(260, 128));
-    }
+        public bool Initialize()
+        {
+            var spritesheet = new SpriteSheetAsset();
+            spritesheet.Load("spritesheet");
+            spritesheet.grid = new SpriteGrid(new Vector2i(WorldConfig.TileSize, WorldConfig.TileSize));
 
-    void RB.IRetroBlitGame.Update()
-    {
+            RB.SpriteSheetSet(spritesheet);
+
+            return true;
+        }
+
+        public RB.HardwareSettings QueryHardware()
+        {
+            return new()
+            {
+                DisplaySize = new(
+                    WorldConfig.DisplayWidth * WorldConfig.TileSize,
+                    WorldConfig.DisplayHeight * WorldConfig.TileSize)
+            };
+        }
+
+        public void Render()
+        {
+            RB.Clear(new Color32());
+            RB.DrawSprite(32, new Vector2i(Player.X * WorldConfig.TileSize, Player.Y * WorldConfig.TileSize));
+        }
+
+        void RB.IRetroBlitGame.Update()
+        {
+            if (RB.AnyKeyDown()) new EventHandler().HandleInput();
+        }
     }
 }
