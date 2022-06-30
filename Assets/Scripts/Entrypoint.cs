@@ -1,6 +1,7 @@
+using RoguelikeTutorial;
 using UnityEngine;
 
-public class Entry : MonoBehaviour
+public class Entrypoint : MonoBehaviour
 {
     void Awake()
     {
