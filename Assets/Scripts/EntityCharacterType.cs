@@ -2,6 +2,6 @@
 {
     public enum EntityCharacterType
     {
-        Player = 1,
+        Player = 32,
     }
 }

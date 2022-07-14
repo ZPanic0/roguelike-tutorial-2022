@@ -50,7 +50,7 @@ namespace RoguelikeTutorial
             foreach (var entity in entities)
             {
                 RB.TintColorSet(entity.Tint);
-                RB.DrawSprite(32, new Vector2i(entity.X * WorldConfig.TileSize, entity.Y * WorldConfig.TileSize));
+                RB.DrawSprite((int)entity.Character, new Vector2i(entity.X * WorldConfig.TileSize, entity.Y * WorldConfig.TileSize));
             }
         }
 
