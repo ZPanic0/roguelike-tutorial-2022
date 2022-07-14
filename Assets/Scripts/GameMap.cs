@@ -1,9 +1,4 @@
 ﻿using RoguelikeTutorial;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.Scripts
 {
@@ -13,7 +8,7 @@ namespace Assets.Scripts
         public int Width { get; set; }
         public int Height { get; set; }
 
-        private readonly Tile[,] tiles;
+        public readonly Tile[,] tiles;
 
         public GameMap(int width, int height)
         {
@@ -43,7 +38,7 @@ namespace Assets.Scripts
         /// </summary>
         public bool InBounds(int x, int y)
         {
-            return x >= 0 && x <= Width && y >= 0 && y <= Height;
+            return x >= 0 && x < Width && y >= 0 && y < Height;
         }
 
         public void Render()

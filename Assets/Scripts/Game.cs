@@ -62,7 +62,7 @@ namespace RoguelikeTutorial
 
         void RB.IRetroBlitGame.Update()
         {
-            if (RB.AnyKeyDown()) eventHandler.HandleInput(player);
+            if (RB.AnyKeyDown()) eventHandler.HandleInput(player, map);
         }
     }
 }
