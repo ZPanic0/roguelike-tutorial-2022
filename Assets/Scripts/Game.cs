@@ -35,15 +35,12 @@ namespace RoguelikeTutorial
             return true;
         }
 
-        public RB.HardwareSettings QueryHardware()
+        public RB.HardwareSettings QueryHardware() => new()
         {
-            return new()
-            {
-                DisplaySize = new(
+            DisplaySize = new(
                     WorldConfig.DisplayWidth * WorldConfig.TileSize,
                     WorldConfig.DisplayHeight * WorldConfig.TileSize)
-            };
-        }
+        };
 
         public void Render()
         {
