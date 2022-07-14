@@ -1,4 +1,5 @@
 using Assets.Scripts;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RoguelikeTutorial
@@ -15,6 +16,7 @@ namespace RoguelikeTutorial
     {
         private Entity player;
         private EventHandler eventHandler;
+        private IList<Entity> entities;
 
         public bool Initialize()
         {
@@ -27,6 +29,8 @@ namespace RoguelikeTutorial
             eventHandler = new EventHandler();
 
             player = new Entity(WorldConfig.DisplayWidth / 2, WorldConfig.DisplayHeight / 2, EntityCharacterType.Player, Color.white);
+            var npc = new Entity(WorldConfig.DisplayWidth / 2 - 5, WorldConfig.DisplayHeight / 2, EntityCharacterType.Player, Color.yellow);
+            entities = new List<Entity> { player, npc };
 
             return true;
         }
@@ -43,8 +47,14 @@ namespace RoguelikeTutorial
 
         public void Render()
         {
+            RB.TintColorSet(new Color32());
             RB.Clear(new Color32());
-            RB.DrawSprite(32, new Vector2i(player.X * WorldConfig.TileSize, player.Y * WorldConfig.TileSize));
+
+            foreach (var entity in entities)
+            {
+                RB.TintColorSet(entity.Tint);
+                RB.DrawSprite(32, new Vector2i(entity.X * WorldConfig.TileSize, entity.Y * WorldConfig.TileSize));
+            }
         }
 
         void RB.IRetroBlitGame.Update()
