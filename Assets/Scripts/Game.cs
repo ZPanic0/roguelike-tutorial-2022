@@ -12,10 +12,20 @@ namespace RoguelikeTutorial
 
     public class Game : RB.IRetroBlitGame
     {
-        private Entity player;
-        private EventHandler eventHandler = new();
-        private IList<Entity> entities;
-        private readonly GameMap map = new(80, 50);
+        private readonly Entity player;
+        private readonly EventHandler eventHandler;
+        private readonly IList<Entity> entities;
+        private readonly GameMap map;
+
+        public Game()
+        {
+            eventHandler = new();
+            map = new(80, 50);
+
+            player = new Entity(map.Width / 2, map.Height / 2, EntityCharacterType.Player, Color.white);
+            var npc = new Entity(map.Width / 2 - 5, map.Height / 2, EntityCharacterType.Player, Color.yellow);
+            entities = new List<Entity> { player, npc };
+        }
 
         public bool Initialize()
         {
@@ -24,10 +34,6 @@ namespace RoguelikeTutorial
             spritesheet.grid = new SpriteGrid(new Vector2i(WorldConfig.TileSize, WorldConfig.TileSize));
 
             RB.SpriteSheetSet(spritesheet);
-
-            player = new Entity(map.Width / 2, map.Height / 2, EntityCharacterType.Player, Color.white);
-            var npc = new Entity(map.Width / 2 - 5, map.Height / 2, EntityCharacterType.Player, Color.yellow);
-            entities = new List<Entity> { player, npc };
 
             return true;
         }
@@ -49,7 +55,8 @@ namespace RoguelikeTutorial
             foreach (var entity in entities)
             {
                 RB.TintColorSet(entity.Tint);
-                RB.DrawSprite((int)entity.Character, new Vector2i(entity.X * WorldConfig.TileSize, entity.Y * WorldConfig.TileSize));
+                RB.DrawSprite((int)entity.Character, 
+                    new Vector2i(entity.X * WorldConfig.TileSize, entity.Y * WorldConfig.TileSize));
             }
         }
 
