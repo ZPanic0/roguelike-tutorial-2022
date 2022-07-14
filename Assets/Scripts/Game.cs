@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using UnityEngine;
 
 namespace RoguelikeTutorial
@@ -10,14 +11,11 @@ namespace RoguelikeTutorial
         public static int TileSize { get; set; } = 10;
     }
 
-    public static class Player
-    {
-        public static int X { get; set; } = WorldConfig.DisplayWidth / 2;
-        public static int Y { get; set; } = WorldConfig.DisplayHeight / 2;
-    }
-
     public class Game : RB.IRetroBlitGame
     {
+        private Entity player;
+        private EventHandler eventHandler;
+
         public bool Initialize()
         {
             var spritesheet = new SpriteSheetAsset();
@@ -25,6 +23,10 @@ namespace RoguelikeTutorial
             spritesheet.grid = new SpriteGrid(new Vector2i(WorldConfig.TileSize, WorldConfig.TileSize));
 
             RB.SpriteSheetSet(spritesheet);
+
+            eventHandler = new EventHandler();
+
+            player = new Entity(WorldConfig.DisplayWidth / 2, WorldConfig.DisplayHeight / 2, EntityCharacterType.Player, Color.white);
 
             return true;
         }
@@ -42,12 +44,12 @@ namespace RoguelikeTutorial
         public void Render()
         {
             RB.Clear(new Color32());
-            RB.DrawSprite(32, new Vector2i(Player.X * WorldConfig.TileSize, Player.Y * WorldConfig.TileSize));
+            RB.DrawSprite(32, new Vector2i(player.X * WorldConfig.TileSize, player.Y * WorldConfig.TileSize));
         }
 
         void RB.IRetroBlitGame.Update()
         {
-            if (RB.AnyKeyDown()) new EventHandler().HandleInput();
+            if (RB.AnyKeyDown()) eventHandler.HandleInput(player);
         }
     }
 }
