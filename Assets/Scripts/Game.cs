@@ -7,16 +7,15 @@ namespace RoguelikeTutorial
 
     public static class WorldConfig
     {
-        public static int DisplayWidth { get; set; } = 80;
-        public static int DisplayHeight { get; set; } = 50;
         public static int TileSize { get; set; } = 10;
     }
 
     public class Game : RB.IRetroBlitGame
     {
         private Entity player;
-        private EventHandler eventHandler;
+        private EventHandler eventHandler = new();
         private IList<Entity> entities;
+        private readonly GameMap map = new(80, 50);
 
         public bool Initialize()
         {
@@ -26,10 +25,8 @@ namespace RoguelikeTutorial
 
             RB.SpriteSheetSet(spritesheet);
 
-            eventHandler = new EventHandler();
-
-            player = new Entity(WorldConfig.DisplayWidth / 2, WorldConfig.DisplayHeight / 2, EntityCharacterType.Player, Color.white);
-            var npc = new Entity(WorldConfig.DisplayWidth / 2 - 5, WorldConfig.DisplayHeight / 2, EntityCharacterType.Player, Color.yellow);
+            player = new Entity(map.Width / 2, map.Height / 2, EntityCharacterType.Player, Color.white);
+            var npc = new Entity(map.Width / 2 - 5, map.Height / 2, EntityCharacterType.Player, Color.yellow);
             entities = new List<Entity> { player, npc };
 
             return true;
@@ -38,14 +35,16 @@ namespace RoguelikeTutorial
         public RB.HardwareSettings QueryHardware() => new()
         {
             DisplaySize = new(
-                    WorldConfig.DisplayWidth * WorldConfig.TileSize,
-                    WorldConfig.DisplayHeight * WorldConfig.TileSize)
+                    map.Width * WorldConfig.TileSize,
+                    map.Height * WorldConfig.TileSize)
         };
 
         public void Render()
         {
             RB.TintColorSet(new Color32());
             RB.Clear(new Color32());
+
+            map.Render();
 
             foreach (var entity in entities)
             {
